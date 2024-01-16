@@ -22,6 +22,11 @@ export default function Home() {
     setShowSuggestion(false);
   };
 
+  const handleDeleteClick = (name: string) => {
+    setSelectedList(selectedList.filter((item) => item !== name));
+    setSuggestionList([...suggestionList, name]);
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24">
       <div>This will be the input box</div>
@@ -31,7 +36,7 @@ export default function Home() {
           selectedList.map((name, index) => (
             <li className="list-none p-1" key={`option-${index}-${name}`}>
               <div className="bg-zinc-400 max-w-fit rounded-3xl whitespace-nowrap p-2">{name}
-              <button className="ml-2 inline align-middle"><IconCloseCircleOutline/></button></div></li>
+              <button onClick={() => handleDeleteClick(name)} className="ml-2 inline align-middle"><IconCloseCircleOutline/></button></div></li>
             )
           )
         }
