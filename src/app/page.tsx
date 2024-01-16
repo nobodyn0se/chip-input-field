@@ -80,10 +80,10 @@ export default function Home() {
   }, [searchQuery]);
 
   return (
-    <main className="flex w-full min-h-screen flex-col items-center justify-start p-24">
-      <div>Click the input box to view names or type for search suggestions</div>
-      <div ref={newRef} className="w-1/2">
-        <div className="flex flex-wrap border-2 border-gray-300 rounded-md mt-4 p-3">
+    <main className="flex w-full min-h-screen flex-col items-center justify-start p-10 md:p-24">
+      <div className="md:w-1/2">Click the input box to view names or type for search suggestions</div>
+      <div ref={newRef} className="w-full md:w-1/2">
+        <div className="flex flex-wrap border-2 border-gray-300 rounded-md mt-4 p-1 md:p-3">
 
           {/* Displays selected names in the form of chips */}
           {
@@ -97,7 +97,7 @@ export default function Home() {
           }
           {
             suggestionList.length > 0 &&
-            <input className="outline-none mt-1" type="text" placeholder="Type a name here"
+            <input className="outline-none m-2 flex-1" type="text" placeholder="Type a name here"
               value={searchQuery} onChange={handleInputSearch} onClick={handleInputClick} />
           }
         </div>
