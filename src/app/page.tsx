@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const nameList: string[] = ['Nikita Khruchev', 'Harry S Truman', 'Catherine Margaret', 'Anna Vasquez', 'Marlo Hendricks'];
@@ -8,37 +8,59 @@ export default function Home() {
   const [showSuggestion, setShowSuggestion] = useState<boolean>(false);
   const [selectedList, setSelectedList] = useState<string[]>([]);
 
+  const [predictionList, setPredictionList] = useState<string[]>([]);
+
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const [debouncedInput, setDebouncedInput] = useState<string>('');
 
   const handleInputClick = () => {
     setShowSuggestion(true);
   };
 
   const handleOutOfFocus = () => {
-    setTimeout((() => setShowSuggestion(false)), 100);
+    const focusTimeout = setTimeout((() => setShowSuggestion(false)), 100);
     setSearchQuery('');
   };
 
   const handleOptionClick = (name: string) => {
+    console.log(`Option ${name} clicked`);
     setSelectedList([...selectedList, name]);
+    console.log(selectedList);
+
     setSuggestionList(suggestionList.filter((item) => item !== name));
+    setPredictionList(predictionList.filter((item) => item !== name));
+    console.log(predictionList);
+
     setShowSuggestion(false);
   };
 
   const handleDeleteClick = (name: string) => {
     setSelectedList(selectedList.filter((item) => item !== name));
     setSuggestionList([...suggestionList, name]);
+    setPredictionList([...predictionList, name]);
   };
 
   const handleInputSearch = (event: any) => {
     setSearchQuery(event.target.value);
+  };
+
+  useEffect(() => {
+    const debounceTime = setTimeout(() => {
+      setDebouncedInput(searchQuery);
+    }, 700);
+    return () => clearTimeout(debounceTime);
+  }, [searchQuery]);
+
+
+  useEffect(() => {
     let predictions = suggestionList.filter((item) => {
-      if (event.target.value === "") return suggestionList;
-      return item.toLowerCase().includes(event.target.value.toLowerCase());
+      return (searchQuery === '') ? suggestionList :
+      item.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
-    setSuggestionList(predictions);
-  };
+    setPredictionList(predictions);
+  }, [searchQuery]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24">
@@ -48,7 +70,7 @@ export default function Home() {
         {
           selectedList.length > 0 &&
           selectedList.map((name, index) => (
-            <li className="list-none p-1" key={`option-${index}-${name}`}>
+            <li className="list-none p-1" key={`option-${name}`}>
               <div className="bg-zinc-400 max-w-fit rounded-3xl whitespace-nowrap p-2">{name}
               <button onClick={() => handleDeleteClick(name)} className="ml-2 inline align-middle"><IconCloseCircleOutline/></button></div></li>
             )
@@ -64,8 +86,8 @@ export default function Home() {
         showSuggestion && (
           <div className="w-1/2 border-2 border-gray-300 mt-1 rounded-md p-2">
             {
-              suggestionList.map((name, index) => (
-                <div key={index} className="p-2 border-b-2 last:border-b-0 hover:bg-blue-300 cursor-pointer border-gray-300"
+              predictionList.map((name, index) => (
+                <div key={`option-${name}`} className="p-2 border-b-2 last:border-b-0 hover:bg-blue-300 cursor-pointer border-gray-300"
                   onClick={() => handleOptionClick(name)}>{name}</div>
               ))
             }
