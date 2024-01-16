@@ -30,7 +30,8 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-start p-24">
       <div>This will be the input box</div>
-      <div className="w-1/2 border-2 border-gray-300 rounded-md mt-4 p-4">
+      <div className="w-1/2 border-2 border-gray-300 rounded-md mt-4 p-3">
+
         {
           selectedList.length > 0 &&
           selectedList.map((name, index) => (
