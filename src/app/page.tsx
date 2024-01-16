@@ -8,12 +8,15 @@ export default function Home() {
   const [showSuggestion, setShowSuggestion] = useState<boolean>(false);
   const [selectedList, setSelectedList] = useState<string[]>([]);
 
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
   const handleInputClick = () => {
     setShowSuggestion(true);
   };
 
   const handleOutOfFocus = () => {
     setTimeout((() => setShowSuggestion(false)), 100);
+    setSearchQuery('');
   };
 
   const handleOptionClick = (name: string) => {
@@ -25,6 +28,16 @@ export default function Home() {
   const handleDeleteClick = (name: string) => {
     setSelectedList(selectedList.filter((item) => item !== name));
     setSuggestionList([...suggestionList, name]);
+  };
+
+  const handleInputSearch = (event: any) => {
+    setSearchQuery(event.target.value);
+    let predictions = suggestionList.filter((item) => {
+      if (event.target.value === "") return suggestionList;
+      return item.toLowerCase().includes(event.target.value.toLowerCase());
+    });
+
+    setSuggestionList(predictions);
   };
 
   return (
@@ -43,7 +56,8 @@ export default function Home() {
         }
         {
           suggestionList.length > 0 &&
-          <input className="w-3/5 outline-none" type="text" placeholder="Type a name here" onClick={handleInputClick} onBlur={handleOutOfFocus} />
+          <input className="w-3/5 outline-none" type="text" placeholder="Type a name here"
+          value={searchQuery} onChange={handleInputSearch} onClick={handleInputClick} onBlur={handleOutOfFocus} />
         }
       </div>
       {
