@@ -29,7 +29,9 @@ export default function Home() {
         {
           selectedList.length > 0 &&
           selectedList.map((name, index) => (
-            <li className="list-none" key={`option-${index}-${name}`}>{name}</li>
+            <li className="list-none p-1" key={`option-${index}-${name}`}>
+              <div className="bg-zinc-400 max-w-fit rounded-3xl whitespace-nowrap p-2">{name}
+              <button className="ml-2 inline align-middle"><IconCloseCircleOutline/></button></div></li>
             )
           )
         }
